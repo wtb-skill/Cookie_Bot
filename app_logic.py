@@ -8,7 +8,22 @@ import threading
 import pygetwindow as gw
 
 
-def play_game(is_bot_on, is_ratio_on, time, ratio, root):
+def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.Tk) -> None:
+    """
+    Start the Cookie Clicker game with the selected options.
+
+    :param is_bot_on: Indicates whether the bot is enabled (1 for on, 2 for off).
+    :type is_bot_on: int
+    :param is_ratio_on: Indicates whether the ratio option is enabled (1 for on, 2 for off).
+    :type is_ratio_on: int
+    :param time: Duration of the game in seconds.
+    :type time: str
+    :param ratio: The ratio for upgrade buying.
+    :type ratio: str
+    :param root: The main Tkinter root window.
+    :type root: tk.Tk
+    :return: None
+    """
     duration = int(time)  # duration of the game
     ratio = float(ratio)
 
@@ -33,12 +48,27 @@ def play_game(is_bot_on, is_ratio_on, time, ratio, root):
     game_thread.start()
 
 
-def start_game(is_bot_on, is_ratio_on, duration, ratio, timer_window):
+def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, timer_window: tk.Toplevel) -> None:
+    """
+    Start the Cookie Clicker game based on selected options.
+
+    :param is_bot_on: Indicates whether the bot is enabled (1 for on, 2 for off).
+    :type is_bot_on: int
+    :param is_ratio_on: Indicates whether the ratio option is enabled (1 for on, 2 for off).
+    :type is_ratio_on: int
+    :param duration: Duration of the game in seconds.
+    :type duration: int
+    :param ratio: The ratio for upgrade buying.
+    :type ratio: float
+    :param timer_window: The timer window for displaying the game duration.
+    :type timer_window: tk.Toplevel
+    :return: None
+    """
     try:
         if is_bot_on == 2 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=False)
             bot.game(duration=duration)
-        elif is_bot_on == 2 and is_ratio_on == 1:
+        elif is_bot_on == 2 and is_ratio_on == 1:  # ERROR after first upgrade
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=True)
             bot.game(duration=duration, ratio=ratio)
         elif is_bot_on == 1 and is_ratio_on == 2:
@@ -52,7 +82,14 @@ def start_game(is_bot_on, is_ratio_on, duration, ratio, timer_window):
         timer_window.destroy()
 
 
-def show_leaderboard(root):  # leaderboard display
+def show_leaderboard(root: tk.Tk) -> None:
+    """
+    Display the leaderboard in a new window.
+
+    :param root: The main Tkinter root window.
+    :type root: tk.Tk
+    :return: None
+    """
     leaderboard_window = tk.Toplevel(root)
     leaderboard_window.title("Leaderboard")
 
@@ -73,7 +110,18 @@ def show_leaderboard(root):  # leaderboard display
     tree.pack()
 
 
-def sort_column(tree, col, reverse):
+def sort_column(tree: ttk.Treeview, col: str, reverse: bool) -> None:
+    """
+    Sort the leaderboard table by a column.
+
+    :param tree: The Treeview widget containing the leaderboard table.
+    :type tree: ttk.Treeview
+    :param col: The column to sort by.
+    :type col: str
+    :param reverse: Indicates whether to reverse the sorting order.
+    :type reverse: bool
+    :return: None
+    """
     data = [(tree.set(child, col), child) for child in tree.get_children('')]
     data.sort(reverse=reverse)
 
@@ -83,14 +131,32 @@ def sort_column(tree, col, reverse):
     tree.heading(col, command=lambda: sort_column(tree, col, not reverse))
 
 
-def show_help(root):  # help display
+def show_help(root: tk.Tk) -> None:
+    """
+    Display a help message in a new window.
+
+    :param root: The main Tkinter root window.
+    :type root: tk.Tk
+    :return: None
+    """
     help_window = tk.Toplevel(root)
     help_window.title("Help")
     help_window.resizable(False, False)  # user unable to change the size of the window
 
     text_help = tk.Text(help_window, wrap=tk.WORD, width=90, height=11, background="Light Steel Blue")
 
-    def insert_bold_label(text_widget, label, description):
+    def insert_bold_label(text_widget: tk.Text, label: str, description: str) -> None:
+        """
+        Insert a bold label followed by a description into a Tkinter Text widget.
+
+        :param text_widget: The Tkinter Text widget where the text should be inserted.
+        :type text_widget: tk.Text
+        :param label: The label text to be displayed in bold.
+        :type label: str
+        :param description: The description text to be displayed.
+        :type description: str
+        :return: None
+        """
         text_widget.tag_configure("bold", font=("FreeMono", 10, "bold"))
         text_widget.insert(tk.END, f"{label}:", "bold")
         text_widget.insert(tk.END, f" {description}\n")

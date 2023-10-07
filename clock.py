@@ -9,7 +9,7 @@ class Timer:
 
     FONT_NAME = "Courier"
 
-    def __init__(self, root: Tk):
+    def __init__(self, root: Toplevel):
         """
         Initialize the Timer instance.
 
@@ -17,6 +17,7 @@ class Timer:
         :type root: Tk
         """
         self.root = root
+        # self.timer_window = Toplevel(self.root)  # Create a Toplevel window for the timer
         self.root.title("Timer")
 
         # Get the screen width and height
