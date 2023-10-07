@@ -6,6 +6,7 @@ from tkinter import messagebox
 import tkinter as tk
 import threading
 import pygetwindow as gw
+from selenium.common.exceptions import NoSuchWindowException
 
 
 def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.Tk) -> None:
@@ -77,7 +78,7 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         elif is_bot_on == 1 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=True)
             bot.game(duration=duration, ratio=ratio)
-    except Exception:
+    except NoSuchWindowException:
         messagebox.showinfo("Game Aborted", "The game was aborted because the webpage was closed.")
         timer_window.destroy()
 
