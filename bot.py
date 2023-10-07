@@ -23,7 +23,7 @@ class CookieClickerBot:
         self.click_enabled = click_enabled
         self.ratio_enabled = ratio_enabled  # changes ratio use
         self.chrome_options = webdriver.ChromeOptions()
-        # self.chrome_options.add_argument('--headless')
+        # self.chrome_options.add_argument('--headless')  # no open window
         # self.chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         self.driver = webdriver.Chrome(options=self.chrome_options)
         self.driver.get("http://orteil.dashnet.org/experiments/cookie/")
