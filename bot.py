@@ -3,11 +3,19 @@ from selenium.webdriver.common.by import By
 from score import GameScoreManager
 import time
 import keyboard
-
+from typing import List
 
 
 class CookieClickerBot:
-    def __init__(self, ratio_enabled, click_enabled):  # changes ratio use
+    def __init__(self, ratio_enabled: bool, click_enabled: bool):
+        """
+        Initialize the CookieClickerBot instance.
+
+        :param ratio_enabled: Indicates whether the bot should use the ratio for upgrades.
+        :type ratio_enabled: bool
+        :param click_enabled: Indicates whether clicking functionality is enabled.
+        :type click_enabled: bool
+        """
         self.bot_mode = "automated"  # Start in automated mode
         self.click_enabled = click_enabled
         self.ratio_enabled = ratio_enabled  # changes ratio use
@@ -19,18 +27,23 @@ class CookieClickerBot:
 
         keyboard.on_press_key("space", self.toggle_bot_mode)  # Hook the space key to toggle bot mode
 
-    def click(self):
+    def click(self) -> None:
         """
-        Click on a cookie.
+        Clicks on the cookie element if click functionality is enabled.
+
+        :return: None
         """
         if self.click_enabled:
             cookie = self.driver.find_element(By.CSS_SELECTOR, value="div#cookie")
             cookie.click()
 
-    def upgrade(self, upgrade):
+    def upgrade(self, upgrade: int) -> None:
         """
-        Click on the upgrade.
-        :param upgrade: chosen upgrade
+        Clicks on a specified upgrade based on the index.
+
+        :param upgrade: Index of the upgrade to be clicked.
+        :type upgrade: int
+        :return: None
         """
         upgrades = [
             self.driver.find_element(By.CSS_SELECTOR, value="div#buyCursor"),
@@ -44,30 +57,44 @@ class CookieClickerBot:
         ]
         upgrades[upgrade].click()
 
-    def upgrade_cost(self):
+    def upgrade_cost(self) -> List[int]:
         """
-        Searches through the webpage for the list of all upgrade costs.
-        :return: the list of all upgrade costs
+        Retrieve the list of costs for all available upgrades on the webpage.
+
+        This method searches through the webpage and extracts the cost values
+        of all available upgrades.
+
+        :return: A list of integers representing the upgrade costs.
+        :rtype: list[int]
         """
 
         upgrade_cost_tags = self.driver.find_elements(By.CSS_SELECTOR, value="div#store b")
         upgrade_costs = [int(upgrade_cost_tags[i].text.split('- ')[1].replace(",", "")) for i in range(8)]
         return upgrade_costs
 
-    def money_value(self):
+    def money_value(self) -> int:
         """
-        Searches through the webpage for the money value.
-        :return: the money value
+        Retrieve the current money value from the webpage.
+
+        This method searches through the webpage and extracts the current money value.
+
+        :return: The current money value as an integer.
+        :rtype: int
         """
         money_tag = self.driver.find_element(By.CSS_SELECTOR, value="div#money").text.replace(",", "")
         money = int(money_tag)
         return money
 
-    def ultimate_strategy(self, ratio):
+    def ultimate_strategy(self, ratio: float) -> int:
         """
-        The applied strategy for the game regarding when and which upgrade to buy.
-        :param ratio: changes the order in which the upgrades are being bought out
-        :return: the index of the next upgrade to buy
+        Determine the index of the next upgrade to buy based on a strategy.
+
+        This method applies a strategy for choosing when and which upgrade to buy in the game.
+
+        :param ratio: A ratio that changes the order of upgrades to be bought.
+        :type ratio: float
+        :return: The index of the next upgrade to buy.
+        :rtype: int
         """
         upgrade_prices = self.upgrade_cost()
 
@@ -85,44 +112,66 @@ class CookieClickerBot:
         return 0
 
     @staticmethod
-    def check_money(money, next_upgrade_price):
+    def check_money(money: int, next_upgrade_price: int) -> bool:
         """
-        Checks if you have enough money to buy the next upgrade.
-        :param money: your current money
-        :param next_upgrade_price: the cost the next upgrade
-        :return: bool
+        Check if you have enough money to buy the next upgrade.
+
+        This method checks if the current amount of money is greater than or equal to
+        the cost of the next upgrade.
+
+        :param money: Your current money.
+        :type money: int
+        :param next_upgrade_price: The cost of the next upgrade.
+        :type next_upgrade_price: int
+        :return: True if you have enough money, False otherwise.
+        :rtype: bool
         """
         return money >= next_upgrade_price
 
-    def score(self):
+    def score(self) -> float:
         """
-        Searches through the webpage for the cookies per second value.
-        :return: cookies/second value
+        Retrieve the cookies per second (CPS) value from the webpage.
+
+        This method searches through the webpage and extracts the CPS value.
+
+        :return: The CPS value as a floating-point number.
+        :rtype: float
         """
         cps_tag = self.driver.find_element(By.CSS_SELECTOR, value="div#cps")
         cps = float(cps_tag.text.split(': ')[1])
         return cps
 
-    def toggle_bot_mode(self, event):  # event arg is required by the library for the event handling mechanism to work
+    def toggle_bot_mode(self, event) -> None:
         """
-        Toggle the bot mode when the spacebar is pressed
+        Toggle the bot mode when the spacebar is pressed.
+
+        This method toggles between 'automated' and 'manual' bot modes based on the
+        current mode.
+
+        :param event: The event argument required by the event handling library.
+        :type event: Any
+        :return: None
         """
         if self.bot_mode == "automated":
             self.bot_mode = "manual"
         else:
             self.bot_mode = "automated"
 
-    def game(self, ratio=None, duration=10):  # changes ratio use
+    def game(self, ratio: float = None, duration: int = 10) -> None:
         """
-        Plays one instance of the game (for the chosen amount of seconds) and applies the chosen ratio.
-        :param ratio: changes the order in which the upgrades are being bought out
-        :param duration: duration of the game in seconds (default is 10 seconds)
-        :return:
+        This method simulates playing the game for the specified duration (in seconds) while
+        applying a chosen ratio for upgrading. It automates clicking and upgrading based on
+        the bot mode and chosen ratio.
+
+        :param ratio: The ratio that changes the order of upgrades (default is None).
+        :type ratio: float or None
+        :param duration: The duration of the game in seconds (default is 10 seconds).
+        :type duration: int
+        :return: None
         """
         start_time = time.time()
         end_time = start_time + duration
 
-        # OLD:
         while time.time() < end_time:
             if self.bot_mode == "automated":
                 self.click()
@@ -137,10 +186,14 @@ class CookieClickerBot:
         print(f"Cookies/Second: {self.score()}, Money: {self.money_value()}")
         self.driver.quit()
 
-    def __del__(self):
+    def __del__(self) -> None:
         """
-        Clean up and unhook the keyboard event handler when the bot is deleted
-        :return:
+        Clean up and unhook the keyboard event handler when the bot is deleted.
+
+        This method is automatically called when the CookieClickerBot object is deleted.
+        It ensures that the keyboard event handler is unhooked to prevent resource leaks.
+
+        :return: None
         """
         keyboard.unhook_all()
 
