@@ -3,9 +3,19 @@ import math
 
 
 class Timer:
+    """
+    A simple countdown timer GUI using Tkinter.
+    """
+
     FONT_NAME = "Courier"
 
-    def __init__(self, root):
+    def __init__(self, root: Tk):
+        """
+        Initialize the Timer instance.
+
+        :param root: The Tkinter root window.
+        :type root: Tk
+        """
         self.root = root
         self.root.title("Timer")
 
@@ -33,7 +43,13 @@ class Timer:
         )
         self.canvas.grid(row=0, column=0, padx=0, pady=0)
 
-    def count_down(self, count):
+    def count_down(self, count: int):
+        """
+        Start the countdown timer.
+
+        :param count: The countdown time in seconds.
+        :type count: int
+        """
         count_min = math.floor(count / 60)
         count_sec = count % 60
 
@@ -45,16 +61,4 @@ class Timer:
             self.root.after(1000, self.count_down, count - 1)
         else:
             self.root.destroy()
-
-
-if __name__ == "__main__":
-    root2 = Tk()
-    timer = Timer(root2)
-    timer.count_down(300)
-    # root2.after(1000, lambda: update_timer(timer))  # Start the timer
-    root2.mainloop()
-
-
-
-
 

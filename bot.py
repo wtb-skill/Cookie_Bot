@@ -7,6 +7,9 @@ from typing import List
 
 
 class CookieClickerBot:
+    """
+    A bot for automating gameplay in the Cookie Clicker web game using Selenium.
+    """
     def __init__(self, ratio_enabled: bool, click_enabled: bool):
         """
         Initialize the CookieClickerBot instance.
