@@ -30,6 +30,8 @@ if __name__ == "__main__":
 # TODO 10✔: Add manual game without bot and ratio (and allow score).
 #          - Clicker OFF, Buy-Out ON provides error, StaleElement, rest works
 #          - Either fix it or change the code to only allow 3 modes.
+#          - Issue: when you click -space- during game to stop clicker and bot buys an upgrade it crashes
+
 
 # C:\Users\adamb\Downloads\chromedriver-win64\chromedriver-win64
 # cd C:\Python nauka\Cookie_Bot
