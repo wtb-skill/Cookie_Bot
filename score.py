@@ -65,7 +65,3 @@ class GameScoreManager:
         leaderboard = self.data.sort_values(by='CPS', ascending=False)
         return leaderboard
 
-
-
-
-
