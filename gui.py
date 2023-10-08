@@ -251,13 +251,20 @@ class CookieClickerBotApp:
         pass
         # print(self.is_bot_on.get())
 
-    # maybe trigger greying of certain options in the future
     def ratio_options(self) -> None:
         """
         Handler for ratio option changes.
 
+        When the Buy-Out is Off, user can't change the ratio value, as it isn't accounted for in the game.
+
         :return: None
         """
-        pass
-        # print(self.is_ratio_on.get())
+        ratio_option = self.is_ratio_on.get()
+
+        if ratio_option == 1:
+            self.entry_ratio.config(state='normal')
+        else:
+            self.entry_ratio.config(disabledbackground=self.BACKGROUND_COLOR_1, state='disabled')
+
+
 
