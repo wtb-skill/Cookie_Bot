@@ -191,6 +191,7 @@ class CookieClickerBot:
             except StaleElementReferenceException:
                 pass
 
+        # Maybe move the score handling to app_logic?
         score_manager = GameScoreManager()  # save the score
         score_manager.add_score(self.score(), duration, self.click_enabled, self.ratio_enabled, ratio)  # save the score
 

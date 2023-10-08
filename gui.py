@@ -5,6 +5,8 @@ from app_logic import play_game, show_leaderboard, show_help
 class CookieClickerBotApp:
     """
     The main application for Cookie Clicker Bot.
+
+    Creates the GUI for the app: widgets and button triggers, the app logic is handled in app_logic.
     """
     BACKGROUND_COLOR_1 = "black"
     BACKGROUND_COLOR_2 = "peach puff"

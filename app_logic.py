@@ -177,14 +177,14 @@ def show_help(root: tk.Tk) -> None:
     insert_bold_label(text_help, "Clicker", "Assigns the bot to click the cookie for you.")
     insert_bold_label(text_help, "Buy-Out", "Assigns the bot to buy upgrades for you.")
     insert_bold_label(text_help, "Ratio",
-                      "Decides how many cheaper upgrades are being bought compared to the more expensive ones.")
+                      "Decides how many cheaper upgrades are being bought compared to the more expensive ones. "
+                      "Takes float values from 0 to 1, where 0 values cheaper upgrades and 1 the more expensive ones.")
     insert_bold_label(text_help, "Time", "Game time in seconds.")
     insert_bold_label(text_help, "Leaderboard",
                       "Displays the leaderboard. You can sort it by CPS(cookies per second), time or game mode "
-                      "(ratio or manual).")
+                      "(Manual[ratio], Clicker, Buy-Out[ratio] or Manual).")
     insert_bold_label(text_help, "Space",
-                      "Pushing the space bar during the game stops/resumes the automated cookie clicking and "
-                      "upgrade buying.")
+                      "Pressing the space bar during the game stops/resumes the automated cookie clicking.")
 
     text_help.pack(padx=10, pady=10)
 
