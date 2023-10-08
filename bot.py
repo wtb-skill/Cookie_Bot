@@ -192,7 +192,7 @@ class CookieClickerBot:
                 pass
 
         score_manager = GameScoreManager()  # save the score
-        score_manager.add_score(self.score(), duration, ratio)  # save the score
+        score_manager.add_score(self.score(), duration, self.click_enabled, self.ratio_enabled, ratio)  # save the score
 
         print(f"Cookies/Second: {self.score()}, Money: {self.money_value()}")
         self.driver.quit()

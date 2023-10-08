@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import Union
 
 
 class GameScoreManager:
@@ -36,20 +37,32 @@ class GameScoreManager:
         """
         self.data.to_csv(self.file_path, index=False)
 
-    def add_score(self, cps: float, time: int, mode: str = None) -> None:
+    def add_score(self, cps: float, time: int, click: bool, buy_out: bool, ratio: Union[str, None] = None) -> None:
         """
         Add a new game score to the data.
+
+        Used by the CookieClickerBot instance at the end of the game.
 
         :param cps: Cookies per second value.
         :type cps: float
         :param time: Time in seconds.
         :type time: int
-        :param mode: Game mode (e.g., "manual" or "automated").
-        :type mode: str, optional
+        :param click: Game mode (e.g., "manual" or "automated").
+        :type click: bool
+        :param buy_out: Game mode (e.g., "manual" or "automated").
+        :type buy_out: bool
+        :param ratio: Game mode (e.g., "manual" or "automated").
+        :type ratio: str, None
         :return: None
         """
-        if mode is None:
-            mode = "manual"
+        if click and buy_out:
+            mode = f"Full-Auto[{ratio}]"
+        elif click and not buy_out:
+            mode = "Clicker"
+        elif not click and buy_out:
+            mode = f"Buy-Out[{ratio}]"
+        else:
+            mode = "Manual"
 
         new_row = {'CPS': cps, 'Time': time, 'Mode': mode}
         self.data = pd.concat([self.data, pd.DataFrame([new_row])], ignore_index=True)
