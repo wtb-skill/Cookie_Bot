@@ -80,7 +80,7 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         if is_bot_on == 2 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=False)
             bot.game(duration=duration)
-        elif is_bot_on == 2 and is_ratio_on == 1:  # ERROR after first upgrade
+        elif is_bot_on == 2 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=True)
             bot.game(duration=duration, ratio=ratio)
         elif is_bot_on == 1 and is_ratio_on == 2:

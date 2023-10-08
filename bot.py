@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from score import GameScoreManager
@@ -179,13 +180,16 @@ class CookieClickerBot:
         start_time: float = time.time()
         end_time = start_time + duration
 
-        while time.time() < end_time:
-            if self.bot_mode == "automated":
+        while time.time() < end_time:  # for the game duration:
+            if self.bot_mode == "automated":  # click if Clicker ON
                 self.click()
-                if self.ratio_enabled:
+            try:  # handles StaleElementReferenceException, which happens when Clicker off and Ratio ON
+                if self.ratio_enabled:  # buy upgrades if Ration ON
                     next_upgrade = self.ultimate_strategy(ratio)
                     if self.check_money(self.money_value(), next_upgrade):
                         self.upgrade(next_upgrade)
+            except StaleElementReferenceException:
+                pass
 
         score_manager = GameScoreManager()  # save the score
         score_manager.add_score(self.score(), duration, ratio)  # save the score
