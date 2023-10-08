@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 from score import GameScoreManager
 import time
 import keyboard
@@ -19,7 +20,7 @@ class CookieClickerBot:
         :param click_enabled: Indicates whether clicking functionality is enabled.
         :type click_enabled: bool
         """
-        self.bot_mode = "automated"  # Start in automated mode
+        self.bot_mode: str = "automated"  # Start in automated mode
         self.click_enabled = click_enabled
         self.ratio_enabled = ratio_enabled  # changes ratio use
         self.chrome_options = webdriver.ChromeOptions()
@@ -37,7 +38,7 @@ class CookieClickerBot:
         :return: None
         """
         if self.click_enabled:
-            cookie = self.driver.find_element(By.CSS_SELECTOR, value="div#cookie")
+            cookie: WebElement = self.driver.find_element(By.CSS_SELECTOR, value="div#cookie")
             cookie.click()
 
     def upgrade(self, upgrade: int) -> None:
@@ -48,7 +49,7 @@ class CookieClickerBot:
         :type upgrade: int
         :return: None
         """
-        upgrades = [
+        upgrades: List[WebElement] = [
             self.driver.find_element(By.CSS_SELECTOR, value="div#buyCursor"),
             self.driver.find_element(By.CSS_SELECTOR, value="div#buyGrandma"),
             self.driver.find_element(By.CSS_SELECTOR, value="div#buyFactory"),
@@ -71,8 +72,8 @@ class CookieClickerBot:
         :rtype: list[int]
         """
 
-        upgrade_cost_tags = self.driver.find_elements(By.CSS_SELECTOR, value="div#store b")
-        upgrade_costs = [int(upgrade_cost_tags[i].text.split('- ')[1].replace(",", "")) for i in range(8)]
+        upgrade_cost_tags: List[WebElement] = self.driver.find_elements(By.CSS_SELECTOR, value="div#store b")
+        upgrade_costs: List[int] = [int(upgrade_cost_tags[i].text.split('- ')[1].replace(",", "")) for i in range(8)]
         return upgrade_costs
 
     def money_value(self) -> int:
@@ -84,7 +85,7 @@ class CookieClickerBot:
         :return: The current money value as an integer.
         :rtype: int
         """
-        money_tag = self.driver.find_element(By.CSS_SELECTOR, value="div#money").text.replace(",", "")
+        money_tag: str = self.driver.find_element(By.CSS_SELECTOR, value="div#money").text.replace(",", "")
         money = int(money_tag)
         return money
 
@@ -99,14 +100,17 @@ class CookieClickerBot:
         :return: The index of the next upgrade to buy.
         :rtype: int
         """
-        upgrade_prices = self.upgrade_cost()
+        upgrade_prices: List[int] = self.upgrade_cost()
 
-        # upgrade value:
-        uv = [1, 4, 5, 2.5, 3.5, 7.14, 20, 123.456789]  # increase in cps compared to the previous upgrade
-        # e.g. if 'upgrade 1' increases cps by 0.8 and 'upgrade 2' increases cps by 4, the uv[2] = 5
+        """
+        # upgrade value = uv:
+        increase in cps compared to the previous upgrade, e.g. if 'upgrade 1' increases cps by 0.8 and 
+        'upgrade 2' increases cps by 4, the uv[2] = 0.8 * 4 = 5
+        """
+        uv: List[float] = [1, 4, 5, 2.5, 3.5, 7.14, 20, 123.456789]
 
         for i in range(len(upgrade_prices) - 1):
-            cum = 1
+            cum: float = 1
             for j in range(len(upgrade_prices) - 1 - i, 0, -1):
                 cum *= uv[j]
                 if upgrade_prices[j - 1] * cum * ratio <= upgrade_prices[len(upgrade_prices) - 1 - i]:
@@ -140,7 +144,7 @@ class CookieClickerBot:
         :return: The CPS value as a floating-point number.
         :rtype: float
         """
-        cps_tag = self.driver.find_element(By.CSS_SELECTOR, value="div#cps")
+        cps_tag: WebElement = self.driver.find_element(By.CSS_SELECTOR, value="div#cps")
         cps = float(cps_tag.text.split(': ')[1])
         return cps
 
@@ -172,7 +176,7 @@ class CookieClickerBot:
         :type duration: int
         :return: None
         """
-        start_time = time.time()
+        start_time: float = time.time()
         end_time = start_time + duration
 
         while time.time() < end_time:

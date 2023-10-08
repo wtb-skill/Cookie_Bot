@@ -1,3 +1,5 @@
+from pygetwindow import Win32Window
+
 from bot import CookieClickerBot
 from clock import Timer
 from score import GameScoreManager
@@ -7,11 +9,12 @@ import tkinter as tk
 import threading
 import pygetwindow as gw
 from selenium.common.exceptions import NoSuchWindowException
+from typing import List
 
 
 def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.Tk) -> None:
     """
-    Start the Cookie Clicker game with the selected options.
+    Start the Cookie Clicker game with the selected options. Also starts the timer.
 
     :param is_bot_on: Indicates whether the bot is enabled (1 for on, 2 for off).
     :type is_bot_on: int
@@ -33,9 +36,17 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
     timer = Timer(timer_window)
 
     # Function to check when the webpage window is active and start the timer
-    def start_timer_when_webpage_active():
-        webpage_window = gw.getWindowsWithTitle("0 cookies - Cookie Clicker")
-        if webpage_window and webpage_window[0].isActive:
+    def start_timer_when_webpage_active() -> None:
+        """
+        Start the timer when the Cookie Clicker webpage window is active.
+
+        This function continuously checks if the Cookie Clicker webpage window is active and starts the timer if it is.
+        If the webpage window is not active, it retries after a short delay.
+
+        :return: None
+        """
+        webpage_window: List[Win32Window] = gw.getWindowsWithTitle("0 cookies - Cookie Clicker")
+        if webpage_window and webpage_window[0].isActive:  # both conditions are necessary otherwise error occurs
             timer_thread = threading.Thread(target=timer.count_down, args=(duration,))
             timer_thread.start()
         else:
@@ -51,7 +62,7 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
 
 def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, timer_window: tk.Toplevel) -> None:
     """
-    Start the Cookie Clicker game based on selected options.
+    Start the Cookie Clicker game with the chosen mode (Auto-clicking/ Auto-upgrading).
 
     :param is_bot_on: Indicates whether the bot is enabled (1 for on, 2 for off).
     :type is_bot_on: int
@@ -78,7 +89,7 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         elif is_bot_on == 1 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=True)
             bot.game(duration=duration, ratio=ratio)
-    except NoSuchWindowException:
+    except NoSuchWindowException:  # handles closing the game browser after the game started
         messagebox.showinfo("Game Aborted", "The game was aborted because the webpage was closed.")
         timer_window.destroy()
 

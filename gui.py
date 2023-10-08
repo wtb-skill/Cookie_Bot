@@ -241,7 +241,7 @@ class CookieClickerBotApp:
         root = self.root
         play_game(is_bot_on, is_ratio_on, time, ratio, root)
 
-    # maybe trigger greying off certain options in the future:
+    # maybe trigger greying of certain options in the future:
     def bot_options(self) -> None:
         """
         Handler for bot option changes.
@@ -251,7 +251,7 @@ class CookieClickerBotApp:
         pass
         # print(self.is_bot_on.get())
 
-    # maybe trigger greying off certain options in the future
+    # maybe trigger greying of certain options in the future
     def ratio_options(self) -> None:
         """
         Handler for ratio option changes.

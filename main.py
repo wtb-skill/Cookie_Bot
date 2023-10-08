@@ -28,7 +28,7 @@ if __name__ == "__main__":
 # TODO 7: Edit the code with notes, explanations, etc.
 # TODO 8: Fix naming of functions, variables, etc, check for unnecessary elements.
 # TODO 10✔: Add manual game without bot and ratio (and allow score).
-#          - Clicker OFF, Buy-Out ON provides error, StaleElement, rest works
+#          - Clicker OFF, Buy-Out ON provides error, StaleElementReferenceException, rest works
 #          - Either fix it or change the code to only allow 3 modes.
 #          - Issue: when you click -space- during game to stop clicker and bot buys an upgrade it crashes
 
