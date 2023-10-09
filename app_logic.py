@@ -1,5 +1,5 @@
+import urllib3
 from pygetwindow import Win32Window
-
 from bot import CookieClickerBot
 from clock import Timer
 from score import GameScoreManager
@@ -8,8 +8,11 @@ from tkinter import messagebox
 import tkinter as tk
 import threading
 import pygetwindow as gw
-from selenium.common.exceptions import NoSuchWindowException
+from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 from typing import List
+
+game_thread: None
+timer_thread: None
 
 
 def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.Tk) -> None:
@@ -28,6 +31,9 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
     :type root: tk.Tk
     :return: None
     """
+
+    global game_thread  # Use the global variables
+
     duration = int(time)  # duration of the game
     ratio = float(ratio)
 
@@ -45,6 +51,8 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
 
         :return: None
         """
+        global timer_thread
+
         webpage_window: List[Win32Window] = gw.getWindowsWithTitle("0 cookies - Cookie Clicker")
         if webpage_window and webpage_window[0].isActive:  # both conditions are necessary otherwise error occurs
             timer_thread = threading.Thread(target=timer.count_down, args=(duration,))
@@ -57,6 +65,7 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
 
     # Start the game in a separate thread
     game_thread = threading.Thread(target=start_game, args=(is_bot_on, is_ratio_on, duration, ratio, timer_window))
+    # game_thread.daemon = True  # Set as daemon thread
     game_thread.start()
 
 
@@ -76,6 +85,8 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
     :type timer_window: tk.Toplevel
     :return: None
     """
+    global timer_thread, game_thread
+
     try:
         if is_bot_on == 2 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=False)
@@ -89,8 +100,13 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         elif is_bot_on == 1 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=True)
             bot.game(duration=duration, ratio=ratio)
-    except NoSuchWindowException:  # handles closing the game browser after the game started
+    # handles closing the game browser after the game started:
+    except (NoSuchWindowException, WebDriverException, urllib3.exceptions.ProtocolError):
         messagebox.showinfo("Game Aborted", "The game was aborted because the webpage was closed.")
+        if timer_thread is not None:
+            timer_thread.join()  # Terminate the timer thread
+        if game_thread is not None:
+            game_thread.join()  # Terminate the game thread
         timer_window.destroy()
 
 
@@ -188,4 +204,9 @@ def show_help(root: tk.Tk) -> None:
 
     text_help.pack(padx=10, pady=10)
 
+
+def handle_window_closing():
+    # ConnectionResetError
+
+    pass
 

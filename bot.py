@@ -183,7 +183,7 @@ class CookieClickerBot:
         while time.time() < end_time:  # for the game duration:
             if self.bot_mode == "automated":  # click if Clicker ON
                 self.click()
-            try:  # handles StaleElementReferenceException, which happens when Clicker off and Ratio ON
+            try:  # handles StaleElementReferenceException, which happens when Clicker OFF and Ratio ON
                 if self.ratio_enabled:  # buy upgrades if Ration ON
                     next_upgrade = self.ultimate_strategy(ratio)
                     if self.check_money(self.money_value(), next_upgrade):
