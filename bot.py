@@ -165,7 +165,7 @@ class CookieClickerBot:
         else:
             self.bot_mode = "automated"
 
-    def game(self, ratio: float = None, duration: int = 10) -> None:
+    def game(self, ratio: float = None, duration: int = 10):
         """
         This method simulates playing the game for the specified duration (in seconds) while
         applying a chosen ratio for upgrading. It automates clicking and upgrading based on
@@ -191,12 +191,14 @@ class CookieClickerBot:
             except StaleElementReferenceException:
                 pass
 
+        # maybe make it a return with those values from line 197
         # Maybe move the score handling to app_logic?
-        score_manager = GameScoreManager()  # save the score
-        score_manager.add_score(self.score(), duration, self.click_enabled, self.ratio_enabled, ratio)  # save the score
+        # score_manager = GameScoreManager()  # save the score
+        # score_manager.add_score(self.score(), duration, self.click_enabled, self.ratio_enabled, ratio)  # save the score
 
         print(f"Cookies/Second: {self.score()}, Money: {self.money_value()}")
         self.driver.quit()
+        return self.score(), duration, self.click_enabled, self.ratio_enabled, ratio
 
     def __del__(self) -> None:
         """

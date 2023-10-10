@@ -11,8 +11,8 @@ import pygetwindow as gw
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 from typing import List
 
-game_thread: None
-timer_thread: None
+# game_thread: None
+# timer_thread: None
 
 
 def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.Tk) -> None:
@@ -32,7 +32,7 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
     :return: None
     """
 
-    global game_thread  # Use the global variables
+    # global game_thread  # Use the global variables
 
     duration = int(time)  # duration of the game
     ratio = float(ratio)
@@ -51,7 +51,7 @@ def play_game(is_bot_on: int, is_ratio_on: int, time: str, ratio: str, root: tk.
 
         :return: None
         """
-        global timer_thread
+        # global timer_thread
 
         webpage_window: List[Win32Window] = gw.getWindowsWithTitle("0 cookies - Cookie Clicker")
         if webpage_window and webpage_window[0].isActive:  # both conditions are necessary otherwise error occurs
@@ -90,23 +90,25 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
     try:
         if is_bot_on == 2 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=False)
-            bot.game(duration=duration)
+            test = bot.game(duration=duration)
         elif is_bot_on == 2 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=False, ratio_enabled=True)
-            bot.game(duration=duration, ratio=ratio)
+            test = bot.game(duration=duration, ratio=ratio)
         elif is_bot_on == 1 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=False)
-            bot.game(duration=duration)
+            test = bot.game(duration=duration)
         elif is_bot_on == 1 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=True)
-            bot.game(duration=duration, ratio=ratio)
+            test = bot.game(duration=duration, ratio=ratio)
+        save_score(test)
+
     # handles closing the game browser after the game started:
-    except (NoSuchWindowException, WebDriverException, urllib3.exceptions.ProtocolError):
+    except (NoSuchWindowException, WebDriverException, urllib3.exceptions.ProtocolError, AttributeError):
         messagebox.showinfo("Game Aborted", "The game was aborted because the webpage was closed.")
-        if timer_thread is not None:
-            timer_thread.join()  # Terminate the timer thread
-        if game_thread is not None:
-            game_thread.join()  # Terminate the game thread
+        # if timer_thread is not None:
+        #     timer_thread.join()  # Terminate the timer thread
+        # if game_thread is not None:
+        #     game_thread.join()  # Terminate the game thread
         timer_window.destroy()
 
 
