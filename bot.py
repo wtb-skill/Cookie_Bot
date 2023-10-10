@@ -197,8 +197,9 @@ class CookieClickerBot:
         # score_manager.add_score(self.score(), duration, self.click_enabled, self.ratio_enabled, ratio)  # save the score
 
         print(f"Cookies/Second: {self.score()}, Money: {self.money_value()}")
+        _return = self.score(), duration, self.click_enabled, self.ratio_enabled, ratio
         self.driver.quit()
-        return self.score(), duration, self.click_enabled, self.ratio_enabled, ratio
+        return _return
 
     def __del__(self) -> None:
         """

@@ -10,6 +10,8 @@ import threading
 import pygetwindow as gw
 from selenium.common.exceptions import NoSuchWindowException, WebDriverException
 from typing import List
+from score import GameScoreManager
+
 
 # game_thread: None
 # timer_thread: None
@@ -85,6 +87,7 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
     :type timer_window: tk.Toplevel
     :return: None
     """
+    test = None
     global timer_thread, game_thread
 
     try:
@@ -97,10 +100,9 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         elif is_bot_on == 1 and is_ratio_on == 2:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=False)
             test = bot.game(duration=duration)
-        elif is_bot_on == 1 and is_ratio_on == 1:
+        else:  # is_bot_on == 1 and is_ratio_on == 1:
             bot = CookieClickerBot(click_enabled=True, ratio_enabled=True)
             test = bot.game(duration=duration, ratio=ratio)
-        save_score(test)
 
     # handles closing the game browser after the game started:
     except (NoSuchWindowException, WebDriverException, urllib3.exceptions.ProtocolError, AttributeError):
@@ -110,6 +112,9 @@ def start_game(is_bot_on: int, is_ratio_on: int, duration: int, ratio: float, ti
         # if game_thread is not None:
         #     game_thread.join()  # Terminate the game thread
         timer_window.destroy()
+    finally:
+        score_manager = GameScoreManager()  # save the score
+        score_manager.add_score(*test)  # save the score
 
 
 def show_leaderboard(root: tk.Tk) -> None:
