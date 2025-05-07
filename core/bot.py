@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.common import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from score import GameScoreManager
+from core.score import GameScoreManager
 import time
 import keyboard
 from typing import List

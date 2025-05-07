@@ -1,4 +1,4 @@
-from gui import CookieClickerBotApp
+from gui.gui import CookieClickerBotApp
 import tkinter as tk
 
 if __name__ == "__main__":

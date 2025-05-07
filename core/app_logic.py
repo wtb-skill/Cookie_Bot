@@ -1,8 +1,8 @@
 from pygetwindow import Win32Window
 
-from bot import CookieClickerBot
-from clock import Timer
-from score import GameScoreManager
+from core.bot import CookieClickerBot
+from core.clock import Timer
+from core.score import GameScoreManager
 from tkinter import ttk
 from tkinter import messagebox
 import tkinter as tk

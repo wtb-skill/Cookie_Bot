@@ -1,5 +1,5 @@
 import tkinter as tk
-from app_logic import play_game, show_leaderboard, show_help
+from core.app_logic import play_game, show_leaderboard, show_help
 
 
 class CookieClickerBotApp:
@@ -55,7 +55,7 @@ class CookieClickerBotApp:
 
         :return: None
         """
-        self.img = tk.PhotoImage(file='cookie.png')
+        self.img = tk.PhotoImage(file='gui/cookie.png')
 
     def create_play_button(self) -> None:
         """

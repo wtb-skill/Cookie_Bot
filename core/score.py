@@ -12,7 +12,7 @@ class GameScoreManager:
 
         The data is loaded from an existing CSV file or an empty DataFrame is created if the file doesn't exist.
         """
-        self.file_path = "score.csv"
+        self.file_path = "data/score.csv"
         self.load_data()
 
     def load_data(self) -> None:
